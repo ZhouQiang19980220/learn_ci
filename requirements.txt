@@ -2,3 +2,4 @@ loguru
 pytest
 black
 ruff
+pytest-cov
