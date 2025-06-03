@@ -28,4 +28,4 @@ jobs:
 
             # 运行带参数的Python脚本
             - name: Run Python script with arguments
-              run: python hello.py --name "GitHub Actions"  # 执行hello.py脚本并传递参数
+              run: python hello.py "GitHub Actions"  # 执行hello.py脚本并传递参数
