@@ -7,4 +7,6 @@ def main():
         name = sys.argv[1]
     print(f"Hello, {name}! This is a Python script running.")
     print(f"Python version: {sys.version}")
-    
+
+if __name__ == "__main__":
+    main()
