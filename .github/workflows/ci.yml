@@ -54,8 +54,3 @@ jobs:
       - name: Run coverage with pytest
         run: |
           pytest --cov=module --cov-report=xml --cov-report=term-missing tests/  # 执行tests目录下的单元测试，并生成覆盖率报告
-
-    # 运行单元测试
-      - name: Run unit tests with pytest
-        run: |
-          pytest tests/  # 执行tests目录下的单元测试
