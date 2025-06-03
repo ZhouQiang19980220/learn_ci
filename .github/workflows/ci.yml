@@ -19,7 +19,7 @@ jobs:
         # 在多个python版本上测试
         strategy:
             matrix:
-                python-version: [3.10, 3.11]  # 定义Python版本矩阵
+                python-version: ['3.10', '3.11']  # 定义Python版本矩阵
 
         steps:
             # 检出代码
