@@ -1,0 +1,20 @@
+# 工作流的名称
+name: my First CI
+
+# 触发条件
+on: push
+
+# job 定义
+jobs:
+    # 定义一个ID为say-hello的job
+    say-hello:
+        # 作业的名称，显示在github UI上
+        name: Greeting Job
+        # 作业运行的操作系统, 这里使用的是最新的ubuntu版本
+        runs-on: ubuntu-latest
+        
+        # 作业的步骤
+        steps:
+            # 步骤的名称
+            - name: Print Greeting
+              run : echo "Hello, World!"
