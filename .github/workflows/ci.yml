@@ -74,6 +74,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 新增：设置 QEMU 以支持多架构构建
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       # 新增：设置 Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -101,6 +105,7 @@ jobs:
         with:
           context: .  # Dockerfile所在目录
           file: ./Dockerfile  # Dockerfile文件
+          platforms: linux/amd64,linux/arm64  # 指定要构建的平台
           push: true  # 推送镜像到GitHub Container Registry
           tags: ${{ steps.meta.outputs.tags }}  # 使用之前提取的标签
           labels: ${{ steps.meta.outputs.labels }}  # 使用之前提取的标签
