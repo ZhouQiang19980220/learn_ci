@@ -1,0 +1,4 @@
+[tool.ruff.lint]
+# 你可以在这里添加其他的 Ruff 设置
+# 忽略 F541 (f-string without any placeholders) 规则
+ignore = ["F541"]
