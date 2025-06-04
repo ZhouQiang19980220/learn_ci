@@ -54,3 +54,51 @@ jobs:
       - name: Run coverage with pytest
         run: |
           pytest --cov=module --cov-report=xml --cov-report=term-missing tests/  # 执行tests目录下的单元测试，并生成覆盖率报告
+
+  # 定义一个新job，构建并发布 docker 镜像
+  build-and-push-docker:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: build-and-test  # 确保在测试通过后才执行
+    
+    # 设置运行条件
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'  # 仅在代码推送到main分支时执行
+
+    # 权限设置
+    permissions:
+      contents: read  # 读取代码仓库内容
+      packages: write  # 写入Docker镜像到GitHub Packages
+
+    steps:
+      # 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 登录到GitHub Container Registry
+      - name: Log in to Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io  # GitHub Container Registry
+          username: ${{ github.repository_owner }}  # 使用仓库所有者作为用户名
+          password: ${{ secrets.CHCR_PAT }}  # 使用提前设置好的密钥
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ lower(github.repository_owner) }}/${{ lower(github.event.repository.name) }}
+          tags: |
+            type=ref,event=branch
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .  # Dockerfile所在目录
+          file: ./Dockerfile  # Dockerfile文件
+          push: true  # 推送镜像到GitHub Container Registry
+          tags: ${{ steps.meta.outputs.tags }}  # 使用之前提取的标签
+          labels: ${{ steps.meta.outputs.labels }}  # 使用之前提取的标签
+          cache-from: type=gha  # 使用GitHub Actions缓存
+          cache-to: type=gha,mode=max  # 启用缓存以加速构建
